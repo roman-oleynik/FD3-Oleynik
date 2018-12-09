@@ -44,14 +44,7 @@
                 ),
             },
             render: function() {
-                var table = React.DOM.table({className: "Table"}, 
-                React.DOM.tr({className: 'TableHeader'},
-                     React.DOM.td({className:'TableHeaderName'}, "Name"),
-                     React.DOM.td({className:'TableHeaderPrice'}, "Price"),
-                     React.DOM.td({className:'TableHeaderPicture'}, 'Picture'),
-                     React.DOM.td({className:'TableHeaderLeft'}, 'Left'),
-                ),
-                this.props.products.map(x => 
+                var productsCode = this.props.products.map(x => 
                         React.DOM.tr({key: x.code, className: 'TableItem'},
                             React.DOM.td({className:'TableItemName'}, x.name),
                             React.DOM.td({className:'TableItemPrice'}, x.price),
@@ -61,27 +54,26 @@
                             React.DOM.td({className:'TableItemLeft'}, x.left),
                         ),
                     
-                ),
-                //вместо блока кода с map хотел вставить переменную productsCode ниже
-                //но таблица через переменную не отрисовывается, несмотря на то,
-                //что productsCode отсюда доступна
-                //в чем причина?
+                );
+                var table = React.DOM.table({className: "Table"},
+                    React.DOM.tbody(null,
+                        React.DOM.tr({className: 'TableHeader'},
+                            React.DOM.td({className:'TableHeaderName'}, "Name"),
+                            React.DOM.td({className:'TableHeaderPrice'}, "Price"),
+                            React.DOM.td({className:'TableHeaderPicture'}, 'Picture'),
+                            React.DOM.td({className:'TableHeaderLeft'}, 'Left'),
+                        ),
+                        productsCode,
+                    ), 
+                
+                
+                
                 );
 
-                // var productsCode = this.props.products.map(x => 
-                //         React.DOM.tr({key: x.code, className: 'TableItem'},
-                //             React.DOM.td({className:'TableItemName'}, x.name),
-                //             React.DOM.td({className:'TableItemPrice'}, x.price),
-                //             React.DOM.td({className:'TableItemPicture'}, 
-                //                 React.DOM.img({src: x.url})
-                //             ),
-                //             React.DOM.td({className:'TableItemLeft'}, x.left),
-                //         ),
-                    
-                // );
+                
                 return React.DOM.div({className: "MarketBlock"},
                 React.DOM.h1({className: "MarketTitle"}, this.props.title),
-                React.DOM.div({className: "productsList"}, table),
+                React.DOM.div({className: "ProductsList"}, table),
                 );
                 
             }
