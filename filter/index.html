@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .List {
+            height: 100px;
+            width: 250px;
+            background: #999;
+            overflow-y: scroll;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        
+    </div>
+
+    <script src="https://unpkg.com/react@15/dist/react.js"></script> 
+    <script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script> 
+    <script>
+        
+        const strings = ["Беларусь", "Ямайка", "Соломоновы острова", "Болгария", "Кабо-Верде", "Доминика", "Австрия", "Португалия", "Малави"];
+
+        const countriesList = React.createClass({
+            displayName: "CountriesList",
+            getInitialState: function() {
+                return {
+                    countries: this.props.data,
+                    isSorted:false,
+                    inputValue:""
+                };
+            },
+            filterData: function(EO) {
+                this.setState({
+                    countries:this.props.data.filter(country=> {
+                        return country.indexOf(EO.target.value) !=-1
+                    }),
+                    inputValue:EO.target.value,
+                });
+                if(this.state.isSorted) {
+                    this.setState({
+                        countries:this.props.data.filter(country=> {
+                            return country.indexOf(EO.target.value) !=-1
+                        }).sort()
+                    });
+                } 
+            },
+            sortData: function(EO) {
+                if (this.state.isSorted) {
+                    this.setState({
+                        isSorted:false,
+                        countries: this.props.data.filter(country=> {
+                            return country.indexOf(this.state.inputValue) !=-1
+                        }),
+                    })
+                    // console.log(this.state.countries);
+                } else {
+                    this.setState({
+                        isSorted:true,
+                        countries: this.props.data.filter(country=> {
+                            return country.indexOf(this.state.inputValue) !=-1
+                        }).sort(),
+                    })
+                }
+            },
+            render: function() {
+                let listItems = this.state.countries.map(country => 
+                    React.DOM.li({key:country, className:"ListItem"}, country)
+                    
+                );
+                
+                return React.DOM.div(null, 
+                    React.DOM.input({type:"checkbox", className:"checkbox", defaultChecked:this.state.isSorted, onChange: this.sortData}),
+                    React.DOM.input({type:'text', className:'text-input', defaultValue:this.state.inputValue, onChange:this.filterData}),
+                    React.DOM.ul({className: "List"}, listItems)
+               
+                )
+                
+            }
+
+        }); 
+
+        ReactDOM.render(
+            React.createElement(countriesList, {data:strings}),
+            document.getElementById('container')
+        );
+        
+    </script>
+</body>
+</html>
