@@ -34,38 +34,40 @@
                     inputValue:""
                 };
             },
-            filterData: function(EO) {
-                this.setState({
-                    countries:this.props.data.filter(country=> {
-                        return country.indexOf(EO.target.value) !=-1
-                    }),
-                    inputValue:EO.target.value,
-                });
-                if(this.state.isSorted) {
-                    this.setState({
-                        countries:this.props.data.filter(country=> {
-                            return country.indexOf(EO.target.value) !=-1
-                        }).sort()
-                    });
-                } 
-            },
             sortData: function(EO) {
-                if (this.state.isSorted) {
+                if (EO.target.type === "checkbox") {
+                    if (this.state.isSorted) {
+                        this.setState({
+                            isSorted:false,
+                            countries: this.props.data.filter(country=> {
+                                return country.indexOf(this.state.inputValue) !=-1
+                            }),
+                        })
+                    } else {
+                        this.setState({
+                            isSorted:true,
+                            countries: this.props.data.filter(country=> {
+                                return country.indexOf(this.state.inputValue) !=-1
+                            }).sort(),
+                        })
+                    }                  
+                } 
+                if (EO.target.type === "text") {
                     this.setState({
-                        isSorted:false,
-                        countries: this.props.data.filter(country=> {
-                            return country.indexOf(this.state.inputValue) !=-1
-                        }),
+                         countries: this.props.data.filter(country=> {
+                             return country.indexOf(EO.target.value) !=-1
+                         }),
+                         inputValue:EO.target.value,
                     })
-                    // console.log(this.state.countries);
-                } else {
-                    this.setState({
-                        isSorted:true,
-                        countries: this.props.data.filter(country=> {
-                            return country.indexOf(this.state.inputValue) !=-1
-                        }).sort(),
-                    })
+                    if(this.state.isSorted) {
+                        this.setState({
+                            countries: this.props.data.filter(country=> {
+                                return country.indexOf(EO.target.value) !=-1
+                            }).sort(),
+                        })
+                    }
                 }
+               
             },
             render: function() {
                 let listItems = this.state.countries.map(country => 
@@ -75,7 +77,7 @@
                 
                 return React.DOM.div(null, 
                     React.DOM.input({type:"checkbox", className:"checkbox", defaultChecked:this.state.isSorted, onChange: this.sortData}),
-                    React.DOM.input({type:'text', className:'text-input', defaultValue:this.state.inputValue, onChange:this.filterData}),
+                    React.DOM.input({type:'text', className:'text-input', defaultValue:this.state.inputValue, onChange:this.sortData}),
                     React.DOM.ul({className: "List"}, listItems)
                
                 )
