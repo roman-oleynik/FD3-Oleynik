@@ -34,7 +34,7 @@
                     inputValue:""
                 };
             },
-            sortData: function(EO) {
+            changeData: function(EO) {
                 if (EO.target.type === "checkbox") {
                     if (this.state.isSorted) {
                         this.setState({
@@ -76,8 +76,8 @@
                 );
                 
                 return React.DOM.div(null, 
-                    React.DOM.input({type:"checkbox", className:"checkbox", defaultChecked:this.state.isSorted, onChange: this.sortData}),
-                    React.DOM.input({type:'text', className:'text-input', defaultValue:this.state.inputValue, onChange:this.sortData}),
+                    React.DOM.input({type:"checkbox", className:"checkbox", defaultChecked:this.state.isSorted, onChange: this.changeData}),
+                    React.DOM.input({type:'text', className:'text-input', defaultValue:this.state.inputValue, onChange:this.changeData}),
                     React.DOM.ul({className: "List"}, listItems)
                
                 )
