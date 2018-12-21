@@ -24,7 +24,7 @@
     <script>
         
         const strings = ["Беларусь", "Ямайка", "Соломоновы острова", "Болгария", "Кабо-Верде", "Доминика", "Австрия", "Португалия", "Малави"];
-
+        
         const countriesList = React.createClass({
             displayName: "CountriesList",
             getInitialState: function() {
@@ -34,40 +34,33 @@
                     inputValue:""
                 };
             },
-            changeData: function(EO) {
-                if (EO.target.type === "checkbox") {
-                    if (this.state.isSorted) {
-                        this.setState({
-                            isSorted:false,
-                            countries: this.props.data.filter(country=> {
-                                return country.indexOf(this.state.inputValue) !=-1
-                            }),
-                        })
-                    } else {
-                        this.setState({
-                            isSorted:true,
-                            countries: this.props.data.filter(country=> {
-                                return country.indexOf(this.state.inputValue) !=-1
-                            }).sort(),
-                        })
-                    }                  
-                } 
-                if (EO.target.type === "text") {
-                    this.setState({
-                         countries: this.props.data.filter(country=> {
-                             return country.indexOf(EO.target.value) !=-1
-                         }),
-                         inputValue:EO.target.value,
-                    })
-                    if(this.state.isSorted) {
-                        this.setState({
-                            countries: this.props.data.filter(country=> {
-                                return country.indexOf(EO.target.value) !=-1
-                            }).sort(),
-                        })
-                    }
+            sortData: function (EO) {
+                this.setState({
+                     isSorted:EO.target.checked,
+                }, this.processData)
+            },
+            filterData: function(EO) {
+                this.setState({
+                    inputValue: EO.target.value,
+                }, this.processData);
+            },
+            processData: function() {
+                
+                let currentData;
+                if (this.state.inputValue) {
+                    currentData = this.props.data.filter(e => e.indexOf(this.state.inputValue) !== -1)
+                } else {
+                    currentData = this.props.data.slice()
                 }
-               
+                if (this.state.isSorted) {
+                    currentData.sort()
+                }
+                
+
+                this.setState({
+                    countries:currentData
+                })
+                
             },
             render: function() {
                 let listItems = this.state.countries.map(country => 
@@ -76,8 +69,8 @@
                 );
                 
                 return React.DOM.div(null, 
-                    React.DOM.input({type:"checkbox", className:"checkbox", defaultChecked:this.state.isSorted, onChange: this.changeData}),
-                    React.DOM.input({type:'text', className:'text-input', defaultValue:this.state.inputValue, onChange:this.changeData}),
+                    React.DOM.input({type:"checkbox", className:"checkbox", defaultChecked:this.state.isSorted, onChange: this.sortData}),
+                    React.DOM.input({type:'text', className:'text-input', defaultValue:this.state.inputValue, onChange:this.filterData}),
                     React.DOM.ul({className: "List"}, listItems)
                
                 )
