@@ -5,7 +5,7 @@ const Apple = React.createClass({
                              React.DOM.td({className:'TableItemName'}, "Apple"),
                              React.DOM.td({className:'TableItemPrice'}, 200),
                              React.DOM.td({className:'TableItemPicture'}, 
-                                React.DOM.img({src:"apple.jpg"})
+                                React.DOM.img({src:"img/apple.jpg"})
                          ),
                              React.DOM.td({className:'TableItemLeft'}, 1000),
                              React.DOM.td({className:'TableItemDelete'}, 
@@ -21,7 +21,7 @@ const Pear = React.createClass({
                              React.DOM.td({className:'TableItemName'}, "Pear"),
                              React.DOM.td({className:'TableItemPrice'}, 300),
                              React.DOM.td({className:'TableItemPicture'}, 
-                                React.DOM.img({src:"pear.jpg"})
+                                React.DOM.img({src:"img/pear.jpg"})
                          ),
                              React.DOM.td({className:'TableItemLeft'}, 800),
                              React.DOM.td({className:'TableItemDelete'}, 
@@ -37,7 +37,7 @@ const Pineapple = React.createClass({
                              React.DOM.td({className:'TableItemName'}, "Pineapple"),
                              React.DOM.td({className:'TableItemPrice'}, 400),
                              React.DOM.td({className:'TableItemPicture'}, 
-                                React.DOM.img({src:"pineapple.jpg"})
+                                React.DOM.img({src:"img/pineapple.jpg"})
                          ),
                              React.DOM.td({className:'TableItemLeft'}, 1200),
                              React.DOM.td({className:'TableItemDelete'}, 
@@ -53,7 +53,7 @@ const AppleSeller = React.createClass({
                              React.DOM.td({className:'TableItemName'}, "Apple Seller"),
                              React.DOM.td({className:'TableItemPrice'}, 1200),
                              React.DOM.td({className:'TableItemPicture'}, 
-                                React.DOM.img({src:"apple-seller.gif"})
+                                React.DOM.img({src:"img/apple-seller.gif"})
                          ),
                              React.DOM.td({className:'TableItemLeft'}, 8),
                              React.DOM.td({className:'TableItemDelete'}, 
