@@ -7,6 +7,7 @@ var marketTitle = "Магазин фруктов, ягод и животных"
             {name: "cat", code:5, price: 135, url: "cat.jpg", left: 20},
             {name: "dog", code:6, price: 25, url: "dog.jpg", left: 80}
         ];
+       
         var component = React.createClass({
             displayName: 'IMarket',
             propTypes: {
@@ -41,8 +42,22 @@ var marketTitle = "Магазин фруктов, ягод и животных"
             deleteItem: function(EO) {
                 EO.target.parentNode.parentNode.parentNode.removeChild(EO.target.parentNode.parentNode)
             },
-            render: function() {            
-                var table = React.DOM.table({className: "Table"},
+            render: function() {        
+                let itemsList = this.props.products.map (el => {
+                    return React.createElement(Product, {
+                        className: "TableItem", 
+                        itemName: el.name,
+                        key: el.code,
+                        id: el.code,
+                        itemLeft: el.left,
+                        itemPrice: el.price,
+                        pictureUrl: el.url,
+                        products:this.props.products, 
+                        markItem:this.markItem, 
+                        deleteItem:this.deleteItem
+                    });
+                });
+                let table = React.DOM.table({className: "Table"},
                     React.DOM.tbody(null,
                         React.DOM.tr({className: 'TableHeader'},
                             React.DOM.td({className:'TableHeaderName'}, "Name"),
@@ -50,16 +65,11 @@ var marketTitle = "Магазин фруктов, ягод и животных"
                             React.DOM.td({className:'TableHeaderPicture'}, 'Picture'),
                             React.DOM.td({className:'TableHeaderLeft'}, 'Left'),
                         ),
-                        React.createElement(Apple, {className: "TableItem", markItem:this.markItem, deleteItem:this.deleteItem}),
-                        React.createElement(Pear, {className: "TableItem", markItem:this.markItem, deleteItem:this.deleteItem}),
-                        React.createElement(Pineapple, {className: "TableItem", markItem:this.markItem, deleteItem:this.deleteItem}),
-                        React.createElement(AppleSeller, {className: "TableItem", markItem:this.markItem, deleteItem:this.deleteItem}),
-
+                        itemsList,
+                        
                     ), 
                 
                 );
-
-                
                 return React.DOM.div({className: "MarketBlock"},
                 React.DOM.h1({className: "MarketTitle"}, this.props.title),
                 React.DOM.div({className: "ProductsList"}, table),
