@@ -24,26 +24,25 @@ var marketTitle = "Магазин фруктов, ягод и животных"
             },
             getInitialState: function() {
                 return {
+                    products: this.props.products,
                     markedItem: null,   
                 }
             },
-            markItem: function(EO) {
-                let clickedField = EO.target.parentNode,
-                    [...tr] = document.getElementsByClassName('TableItem');
-                    tr.forEach( e => {
-                    e.style.background = "#fff";
-                });
-                console.log(clickedField)
+            markItem: function(id) {
                 this.setState({
-                    markedItem:clickedField.id
-                });
-                clickedField.style.background = "#ff0";
+                    markedItem:id
+                })
             },
-            deleteItem: function(EO) {
-                EO.target.parentNode.parentNode.parentNode.removeChild(EO.target.parentNode.parentNode)
+            deleteItem: function(id) {
+                this.setState({
+                    products: this.state.products.filter(e => {
+                        return e.code !== id
+                    })
+                })
+                
             },
             render: function() {        
-                let itemsList = this.props.products.map (el => {
+                let itemsList = this.state.products.map (el => {
                     return React.createElement(Product, {
                         className: "TableItem", 
                         itemName: el.name,
@@ -54,7 +53,8 @@ var marketTitle = "Магазин фруктов, ягод и животных"
                         pictureUrl: el.url,
                         products:this.props.products, 
                         markItem:this.markItem, 
-                        deleteItem:this.deleteItem
+                        deleteItem:this.deleteItem,
+                        selected: this.state.markedItem,
                     });
                 });
                 let table = React.DOM.table({className: "Table"},
