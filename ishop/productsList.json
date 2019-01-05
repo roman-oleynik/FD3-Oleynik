@@ -1,0 +1,8 @@
+[
+    {"name": "apple", "code":1, "price": 25, "url": "apple.jpg", "left": 2000},
+    {"name": "pear", "code":2, "price": 35, "url": "pear.jpg", "left": 1000},
+    {"name": "pineapple", "code":3, "price": 55,"url": "pineapple.jpg", "left": 200},
+    {"name": "grape", "code":4, "price": 38, "url": "grape.jpg", "left": 1300},
+    {"name": "cat", "code":5, "price": 135, "url": "cat.jpg", "left": 20},
+    {"name": "dog", "code":6, "price": 25, "url": "dog.jpg", "left": 80}
+]
