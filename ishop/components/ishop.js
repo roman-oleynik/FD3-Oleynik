@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Product from './goods';
+import Card from './itemCard';
+import Form from './newGood';
 
 class IShop extends React.Component {
     static propTypes = {
@@ -20,22 +22,135 @@ class IShop extends React.Component {
     state = {
         products: this.props.products,
         markedItem: null,
+        editedItem: null,
+        
+        appMode: 1,
+        nameFieldValid: false,
+        priceFieldValid: false,
+        urlFieldValid: false,
+        leftFieldValid: false,
+        nameFieldValue: '',
+        priceFieldValue: '',
+        urlFieldValue: '',
+        leftFieldValue: '',
     };
 
     markItem = (id) => {
         this.setState({
-            markedItem:id
+            markedItem:id,
         })
+    };
+
+
+    addNewItem = () => {
+        this.setState({
+            appMode:2
+        })
+    };
+
+    editItem = (id) => {
+        
+        this.setState({
+            appMode: 3,
+            editedItem: id
+        });
+        
     };
 
     deleteItem = (id) => {
-        this.setState({
-            products: this.state.products.filter(e => {
-                return e.code !== id
+        const conf = confirm('Do you really want to delete this item?');
+        if (conf) {
+            this.setState({
+                products: this.state.products.filter(e => {
+                    return e.code !== id
+                })
             })
-        })
+        }
+        
     };
 
+    validateField = (target) => {
+        let inputName = target.name;
+        let inputClassName = target.className;
+        let inputValue = target.value;
+        this.setState({
+            [inputClassName]: inputValue
+        });
+        inputValue !== ""
+        ?
+        this.setState({
+            [inputName] : true,
+        }) 
+        :
+        this.setState({
+            [inputName] : false
+        }) 
+        
+    };
+
+    submitData = () => {
+        if(this.state.appMode === 2 && this.state.nameFieldValid && this.state.priceFieldValid &&
+            this.state.urlFieldValid && this.state.leftFieldValid) {
+                this.state.products.push({name: this.state.nameFieldValue, code: this.state.products.length+1, 
+                    price: this.state.priceFieldValue, url: this.state.urlFieldValue, 
+                    left: this.state.leftFieldValue});
+            this.setState({
+                appMode: 1,
+                nameFieldValid: false,
+                priceFieldValid: false,
+                urlFieldValid: false,
+                leftFieldValid: false,
+                markedItem: null
+            })
+        }
+        else if (this.state.appMode === 3 && this.state.nameFieldValid && this.state.priceFieldValid &&
+            this.state.urlFieldValid && this.state.leftFieldValid) {
+                this.setState({
+                    products: this.state.products.map( el => {
+                        if (el.code === this.state.editedItem) {
+                            return {
+                                name: this.state.nameFieldValue,
+                                key: this.state.editedItem,
+                                price: +this.state.priceFieldValue,
+                                url: this.state.urlFieldValue,
+                                left: +this.state.leftFieldValue
+                            }
+
+                        } else {
+                            return el;
+                        }
+                        
+                        
+                    }),
+                    appMode: 1,
+                    nameFieldValid: false,
+                    priceFieldValid: false,
+                    urlFieldValid: false,
+                    leftFieldValid: false,
+                    markedItem: null
+                })
+        }
+        else {
+            alert('Fill in all fields of form');
+        }
+                 
+        
+    };
+
+    canselForm = () => {
+        this.setState({
+            appMode: 1,
+            nameFieldValid: false,
+            priceFieldValid: false,
+            urlFieldValid: false,
+            leftFieldValid: false,
+            nameFieldValue: '',
+            priceFieldValue: '',
+            urlFieldValue: '',
+            leftFieldValue: '',
+        })
+    };
+    
     render() {
         let itemsList = this.state.products.map (el => {
             return <Product
@@ -48,8 +163,10 @@ class IShop extends React.Component {
                 pictureUrl = {el.url}
                 products = {this.props.products}
                 markItem = {this.markItem}
+                editItem = {this.editItem}
                 deleteItem = {this.deleteItem}
                 selected = {this.state.markedItem}
+                appMode = {this.state.appMode}
             />
         });
         let table = <table className='Table'>
@@ -67,6 +184,58 @@ class IShop extends React.Component {
         return <div className='MarketBlock'>
                     <h1 className='MarketTitle'>{this.props.title}</h1>
                     <div className='ProductsList'>{table}</div>
+                    <button className='NewLI' onClick={this.addNewItem}>Add new list item</button>
+                    {this.state.appMode === 1 && this.state.products.map( el => {
+                        return <Card 
+                            itemName = {el.name}
+                            key = {el.code}
+                            id = {el.code}
+                            itemLeft = {el.left}
+                            itemPrice = {el.price}
+                            pictureUrl = {el.url}
+                            products = {this.props.products}
+                            markItem = {this.markItem}
+                            selected = {this.state.markedItem}
+                        />
+                    })}
+                    {this.state.appMode === 2 &&
+                    <Form 
+                        nameFieldValid = {this.state.nameFieldValid}
+                        priceFieldValid = {this.state.priceFieldValid}
+                        urlFieldValid = {this.state.urlFieldValid}
+                        leftFieldValid = {this.state.leftFieldValid}
+                        nameFieldValue = {this.state.nameFieldValue}
+                        priceFieldValue = {this.state.priceFieldValue}
+                        urlFieldValue = {this.state.urlFieldValue}
+                        leftFieldValue = {this.state.leftFieldValue}
+                        validateField = {this.validateField}
+                        products = {this.props.products} 
+                        selected = {this.state.markedItem}
+                        appMode = {this.state.appMode}
+                        submitData = {this.submitData}
+                        canselForm = {this.canselForm}
+
+                    />
+                    }
+                    {this.state.appMode === 3 &&
+                    <Form 
+                        nameFieldValid = {this.state.nameFieldValid}
+                        priceFieldValid = {this.state.priceFieldValid}
+                        urlFieldValid = {this.state.urlFieldValid}
+                        leftFieldValid = {this.state.leftFieldValid}
+                        nameFieldValue = {this.state.nameFieldValue}
+                        priceFieldValue = {this.state.priceFieldValue}
+                        urlFieldValue = {this.state.urlFieldValue}
+                        leftFieldValue = {this.state.leftFieldValue}
+                        validateField = {this.validateField}
+                        products = {this.props.products} 
+                        selected = {this.state.markedItem}
+                        appMode = {this.state.appMode}
+                        submitData = {this.submitData}
+                        canselForm = {this.canselForm}
+
+                    />
+                    }
                </div> 
     }
 }

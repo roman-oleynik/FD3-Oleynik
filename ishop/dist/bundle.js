@@ -546,7 +546,7 @@ var _ishop2 = _interopRequireDefault(_ishop);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var productsList = __webpack_require__(23);
+var productsList = __webpack_require__(26);
 
 _reactDom2.default.render(_react2.default.createElement(_ishop2.default, { products: productsList, title: '\u041C\u0430\u0433\u0430\u0437\u0438\u043D \u0444\u0440\u0443\u043A\u0442\u043E\u0432, \u044F\u0433\u043E\u0434 \u0438 \u0436\u0438\u0432\u043E\u0442\u043D\u044B\u0445' }), document.getElementById('container'));
 
@@ -24095,7 +24095,17 @@ var _goods = __webpack_require__(22);
 
 var _goods2 = _interopRequireDefault(_goods);
 
+var _itemCard = __webpack_require__(23);
+
+var _itemCard2 = _interopRequireDefault(_itemCard);
+
+var _newGood = __webpack_require__(24);
+
+var _newGood2 = _interopRequireDefault(_newGood);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -24119,16 +24129,96 @@ var IShop = function (_React$Component) {
 
         return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = IShop.__proto__ || Object.getPrototypeOf(IShop)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
             products: _this.props.products,
-            markedItem: null
+            markedItem: null,
+            editedItem: null,
+
+            appMode: 1,
+            nameFieldValid: false,
+            priceFieldValid: false,
+            urlFieldValid: false,
+            leftFieldValid: false,
+            nameFieldValue: '',
+            priceFieldValue: '',
+            urlFieldValue: '',
+            leftFieldValue: ''
         }, _this.markItem = function (id) {
             _this.setState({
                 markedItem: id
             });
-        }, _this.deleteItem = function (id) {
+        }, _this.addNewItem = function () {
             _this.setState({
-                products: _this.state.products.filter(function (e) {
-                    return e.code !== id;
-                })
+                appMode: 2
+            });
+        }, _this.editItem = function (id) {
+
+            _this.setState({
+                appMode: 3,
+                editedItem: id
+            });
+        }, _this.deleteItem = function (id) {
+            var conf = confirm('Do you really want to delete this item?');
+            if (conf) {
+                _this.setState({
+                    products: _this.state.products.filter(function (e) {
+                        return e.code !== id;
+                    })
+                });
+            }
+        }, _this.validateField = function (target) {
+            var inputName = target.name;
+            var inputClassName = target.className;
+            var inputValue = target.value;
+            _this.setState(_defineProperty({}, inputClassName, inputValue));
+            inputValue !== "" ? _this.setState(_defineProperty({}, inputName, true)) : _this.setState(_defineProperty({}, inputName, false));
+        }, _this.submitData = function () {
+            if (_this.state.appMode === 2 && _this.state.nameFieldValid && _this.state.priceFieldValid && _this.state.urlFieldValid && _this.state.leftFieldValid) {
+                _this.state.products.push({ name: _this.state.nameFieldValue, code: _this.state.products.length + 1,
+                    price: _this.state.priceFieldValue, url: _this.state.urlFieldValue,
+                    left: _this.state.leftFieldValue });
+                _this.setState({
+                    appMode: 1,
+                    nameFieldValid: false,
+                    priceFieldValid: false,
+                    urlFieldValid: false,
+                    leftFieldValid: false,
+                    markedItem: null
+                });
+            } else if (_this.state.appMode === 3 && _this.state.nameFieldValid && _this.state.priceFieldValid && _this.state.urlFieldValid && _this.state.leftFieldValid) {
+                _this.setState({
+                    products: _this.state.products.map(function (el) {
+                        if (el.code === _this.state.editedItem) {
+                            return {
+                                name: _this.state.nameFieldValue,
+                                key: _this.state.editedItem,
+                                price: +_this.state.priceFieldValue,
+                                url: _this.state.urlFieldValue,
+                                left: +_this.state.leftFieldValue
+                            };
+                        } else {
+                            return el;
+                        }
+                    }),
+                    appMode: 1,
+                    nameFieldValid: false,
+                    priceFieldValid: false,
+                    urlFieldValid: false,
+                    leftFieldValid: false,
+                    markedItem: null
+                });
+            } else {
+                alert('Fill in all fields of form');
+            }
+        }, _this.canselForm = function () {
+            _this.setState({
+                appMode: 1,
+                nameFieldValid: false,
+                priceFieldValid: false,
+                urlFieldValid: false,
+                leftFieldValid: false,
+                nameFieldValue: '',
+                priceFieldValue: '',
+                urlFieldValue: '',
+                leftFieldValue: ''
             });
         }, _temp), _possibleConstructorReturn(_this, _ret);
     }
@@ -24149,8 +24239,10 @@ var IShop = function (_React$Component) {
                     pictureUrl: el.url,
                     products: _this2.props.products,
                     markItem: _this2.markItem,
+                    editItem: _this2.editItem,
                     deleteItem: _this2.deleteItem,
-                    selected: _this2.state.markedItem
+                    selected: _this2.state.markedItem,
+                    appMode: _this2.state.appMode
                 });
             });
             var table = _react2.default.createElement(
@@ -24199,7 +24291,59 @@ var IShop = function (_React$Component) {
                     'div',
                     { className: 'ProductsList' },
                     table
-                )
+                ),
+                _react2.default.createElement(
+                    'button',
+                    { className: 'NewLI', onClick: this.addNewItem },
+                    'Add new list item'
+                ),
+                this.state.appMode === 1 && this.state.products.map(function (el) {
+                    return _react2.default.createElement(_itemCard2.default, {
+                        itemName: el.name,
+                        key: el.code,
+                        id: el.code,
+                        itemLeft: el.left,
+                        itemPrice: el.price,
+                        pictureUrl: el.url,
+                        products: _this2.props.products,
+                        markItem: _this2.markItem,
+                        selected: _this2.state.markedItem
+                    });
+                }),
+                this.state.appMode === 2 && _react2.default.createElement(_newGood2.default, {
+                    nameFieldValid: this.state.nameFieldValid,
+                    priceFieldValid: this.state.priceFieldValid,
+                    urlFieldValid: this.state.urlFieldValid,
+                    leftFieldValid: this.state.leftFieldValid,
+                    nameFieldValue: this.state.nameFieldValue,
+                    priceFieldValue: this.state.priceFieldValue,
+                    urlFieldValue: this.state.urlFieldValue,
+                    leftFieldValue: this.state.leftFieldValue,
+                    validateField: this.validateField,
+                    products: this.props.products,
+                    selected: this.state.markedItem,
+                    appMode: this.state.appMode,
+                    submitData: this.submitData,
+                    canselForm: this.canselForm
+
+                }),
+                this.state.appMode === 3 && _react2.default.createElement(_newGood2.default, {
+                    nameFieldValid: this.state.nameFieldValid,
+                    priceFieldValid: this.state.priceFieldValid,
+                    urlFieldValid: this.state.urlFieldValid,
+                    leftFieldValid: this.state.leftFieldValid,
+                    nameFieldValue: this.state.nameFieldValue,
+                    priceFieldValue: this.state.priceFieldValue,
+                    urlFieldValue: this.state.urlFieldValue,
+                    leftFieldValue: this.state.leftFieldValue,
+                    validateField: this.validateField,
+                    products: this.props.products,
+                    selected: this.state.markedItem,
+                    appMode: this.state.appMode,
+                    submitData: this.submitData,
+                    canselForm: this.canselForm
+
+                })
             );
         }
     }]);
@@ -24924,6 +25068,8 @@ var Product = function (_React$Component) {
 
       return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Product.__proto__ || Object.getPrototypeOf(Product)).call.apply(_ref, [this].concat(args))), _this), _this.prodMark = function () {
          _this.props.markItem(_this.props.id);
+      }, _this.prodEdit = function () {
+         _this.props.editItem(_this.props.id);
       }, _this.prodDel = function () {
          _this.props.deleteItem(_this.props.id);
       }, _temp), _possibleConstructorReturn(_this, _ret);
@@ -24934,7 +25080,7 @@ var Product = function (_React$Component) {
       value: function render() {
          return _react2.default.createElement(
             'tr',
-            { className: 'TableItem' + (this.props.selected === this.props.id ? " selected" : null), id: this.props.id, onClick: this.prodMark },
+            { className: 'TableItem' + (this.props.appMode === 1 && this.props.selected === this.props.id ? " selected" : null), id: this.props.id, onClick: this.prodMark },
             _react2.default.createElement(
                'td',
                { className: 'TableItemName' },
@@ -24957,10 +25103,19 @@ var Product = function (_React$Component) {
             ),
             _react2.default.createElement(
                'td',
+               { className: 'TableItemEdit' },
+               _react2.default.createElement(
+                  'button',
+                  { className: 'TableItemEditButton', onClick: this.prodEdit },
+                  'Edit'
+               )
+            ),
+            _react2.default.createElement(
+               'td',
                { className: 'TableItemDelete' },
                _react2.default.createElement(
                   'button',
-                  { className: 'TableItemButton', onClick: this.prodDel },
+                  { className: 'TableItemDeleteButton', onClick: this.prodDel },
                   'Delete'
                )
             )
@@ -24975,6 +25130,188 @@ exports.default = Product;
 
 /***/ }),
 /* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Card = function (_React$Component) {
+    _inherits(Card, _React$Component);
+
+    function Card() {
+        _classCallCheck(this, Card);
+
+        return _possibleConstructorReturn(this, (Card.__proto__ || Object.getPrototypeOf(Card)).apply(this, arguments));
+    }
+
+    _createClass(Card, [{
+        key: 'render',
+        value: function render() {
+            return this.props.selected === this.props.id && _react2.default.createElement(
+                'div',
+                { className: 'ProductCard' },
+                _react2.default.createElement(
+                    'h3',
+                    { className: 'ProductCardName' },
+                    this.props.itemName
+                ),
+                _react2.default.createElement('img', { className: 'ProductCardPicture', src: 'img/' + this.props.pictureUrl }),
+                _react2.default.createElement(
+                    'p',
+                    { className: 'ProductCardPrice' },
+                    this.props.itemPrice + ' BTC'
+                )
+            );
+        }
+    }]);
+
+    return Card;
+}(_react2.default.Component);
+
+exports.default = Card;
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+__webpack_require__(25);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Form = function (_React$Component) {
+    _inherits(Form, _React$Component);
+
+    function Form() {
+        var _ref;
+
+        var _temp, _this, _ret;
+
+        _classCallCheck(this, Form);
+
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+        }
+
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Form.__proto__ || Object.getPrototypeOf(Form)).call.apply(_ref, [this].concat(args))), _this), _this.validateField = function (EO) {
+            _this.props.validateField(EO.target);
+        }, _this.submitData = function () {
+            _this.props.submitData();
+        }, _this.canselForm = function () {
+            _this.props.canselForm();
+        }, _temp), _possibleConstructorReturn(_this, _ret);
+    }
+
+    _createClass(Form, [{
+        key: 'render',
+        value: function render() {
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'NewGoodForm' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'FormField FormFieldName' },
+                    _react2.default.createElement('input', { type: 'text', name: 'nameFieldValid', placeholder: 'Name', className: 'nameFieldValue', onChange: this.validateField }),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'FormFieldNameMessage' },
+                        this.props.nameFieldValid ? "" : "Please, fill in this field"
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'FormField FormFieldName' },
+                    _react2.default.createElement('input', { type: 'text', name: 'priceFieldValid', placeholder: 'Price', className: 'priceFieldValue', onChange: this.validateField }),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'FormFieldNameMessage' },
+                        this.props.priceFieldValid ? "" : "Please, fill in this field"
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'FormField FormFieldName' },
+                    _react2.default.createElement('input', { type: 'text', name: 'urlFieldValid', placeholder: 'pictureURL', className: 'urlFieldValue', onChange: this.validateField }),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'FormFieldNameMessage' },
+                        this.props.urlFieldValid ? "" : "Please, fill in this field"
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'FormField FormFieldName' },
+                    _react2.default.createElement('input', { type: 'text', name: 'leftFieldValid', placeholder: 'Left', className: 'leftFieldValue', onChange: this.validateField }),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'FormFieldNameMessage' },
+                        this.props.leftFieldValid ? "" : "Please, fill in this field"
+                    )
+                ),
+                _react2.default.createElement(
+                    'button',
+                    { className: 'SubmitButton', onClick: this.submitData },
+                    'Submit'
+                ),
+                _react2.default.createElement(
+                    'button',
+                    { className: 'CancelButton', onClick: this.canselForm },
+                    'Cansel'
+                )
+            );
+        }
+    }]);
+
+    return Form;
+}(_react2.default.Component);
+
+exports.default = Form;
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 26 */
 /***/ (function(module, exports) {
 
 module.exports = [{"name":"apple","code":1,"price":25,"url":"apple.jpg","left":2000},{"name":"pear","code":2,"price":35,"url":"pear.jpg","left":1000},{"name":"pineapple","code":3,"price":55,"url":"pineapple.jpg","left":200},{"name":"grape","code":4,"price":38,"url":"grape.jpg","left":1300},{"name":"cat","code":5,"price":135,"url":"cat.jpg","left":20},{"name":"dog","code":6,"price":25,"url":"dog.jpg","left":80}]
