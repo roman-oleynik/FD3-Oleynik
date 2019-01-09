@@ -546,9 +546,9 @@ var _ishop2 = _interopRequireDefault(_ishop);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var productsList = __webpack_require__(26);
+var productsList = __webpack_require__(28);
 
-_reactDom2.default.render(_react2.default.createElement(_ishop2.default, { products: productsList, title: '\u041C\u0430\u0433\u0430\u0437\u0438\u043D \u0444\u0440\u0443\u043A\u0442\u043E\u0432, \u044F\u0433\u043E\u0434 \u0438 \u0436\u0438\u0432\u043E\u0442\u043D\u044B\u0445' }), document.getElementById('container'));
+_reactDom2.default.render(_react2.default.createElement(_ishop2.default, { products: productsList, title: 'The Reactive Market' }), document.getElementById('container'));
 
 /***/ }),
 /* 8 */
@@ -24091,15 +24091,17 @@ var _propTypes = __webpack_require__(19);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _goods = __webpack_require__(22);
+__webpack_require__(22);
+
+var _goods = __webpack_require__(23);
 
 var _goods2 = _interopRequireDefault(_goods);
 
-var _itemCard = __webpack_require__(23);
+var _itemCard = __webpack_require__(24);
 
 var _itemCard2 = _interopRequireDefault(_itemCard);
 
-var _newGood = __webpack_require__(24);
+var _newGood = __webpack_require__(26);
 
 var _newGood2 = _interopRequireDefault(_newGood);
 
@@ -24143,19 +24145,32 @@ var IShop = function (_React$Component) {
             leftFieldValue: ''
         }, _this.markItem = function (id) {
             _this.setState({
-                markedItem: id
+                markedItem: id,
+                nameFieldValue: '',
+                priceFieldValue: '',
+                urlFieldValue: '',
+                leftFieldValue: ''
             });
         }, _this.addNewItem = function () {
             _this.setState({
                 appMode: 2
             });
-        }, _this.editItem = function (id) {
-
+        }, _this.editItem = function (id, i) {
             _this.setState({
                 appMode: 3,
-                editedItem: id
+                editedItem: id,
+                nameFieldValue: _this.state.products[i].name,
+                priceFieldValue: _this.state.products[i].price,
+                urlFieldValue: _this.state.products[i].url,
+                leftFieldValue: _this.state.products[i].left,
+                nameFieldValid: true,
+                priceFieldValid: true,
+                urlFieldValid: true,
+                leftFieldValid: true
             });
+            console.log(i);
         }, _this.deleteItem = function (id) {
+
             var conf = confirm('Do you really want to delete this item?');
             if (conf) {
                 _this.setState({
@@ -24189,7 +24204,7 @@ var IShop = function (_React$Component) {
                         if (el.code === _this.state.editedItem) {
                             return {
                                 name: _this.state.nameFieldValue,
-                                key: _this.state.editedItem,
+                                code: _this.state.editedItem,
                                 price: +_this.state.priceFieldValue,
                                 url: _this.state.urlFieldValue,
                                 left: +_this.state.leftFieldValue
@@ -24228,7 +24243,7 @@ var IShop = function (_React$Component) {
         value: function render() {
             var _this2 = this;
 
-            var itemsList = this.state.products.map(function (el) {
+            var itemsList = this.state.products.map(function (el, i) {
                 return _react2.default.createElement(_goods2.default, {
                     className: 'TableItem',
                     itemName: el.name,
@@ -24242,7 +24257,8 @@ var IShop = function (_React$Component) {
                     editItem: _this2.editItem,
                     deleteItem: _this2.deleteItem,
                     selected: _this2.state.markedItem,
-                    appMode: _this2.state.appMode
+                    appMode: _this2.state.appMode,
+                    arrayIndex: i
                 });
             });
             var table = _react2.default.createElement(
@@ -24289,61 +24305,80 @@ var IShop = function (_React$Component) {
                 ),
                 _react2.default.createElement(
                     'div',
-                    { className: 'ProductsList' },
-                    table
-                ),
-                _react2.default.createElement(
-                    'button',
-                    { className: 'NewLI', onClick: this.addNewItem },
-                    'Add new list item'
-                ),
-                this.state.appMode === 1 && this.state.products.map(function (el) {
-                    return _react2.default.createElement(_itemCard2.default, {
-                        itemName: el.name,
-                        key: el.code,
-                        id: el.code,
-                        itemLeft: el.left,
-                        itemPrice: el.price,
-                        pictureUrl: el.url,
-                        products: _this2.props.products,
-                        markItem: _this2.markItem,
-                        selected: _this2.state.markedItem
-                    });
-                }),
-                this.state.appMode === 2 && _react2.default.createElement(_newGood2.default, {
-                    nameFieldValid: this.state.nameFieldValid,
-                    priceFieldValid: this.state.priceFieldValid,
-                    urlFieldValid: this.state.urlFieldValid,
-                    leftFieldValid: this.state.leftFieldValid,
-                    nameFieldValue: this.state.nameFieldValue,
-                    priceFieldValue: this.state.priceFieldValue,
-                    urlFieldValue: this.state.urlFieldValue,
-                    leftFieldValue: this.state.leftFieldValue,
-                    validateField: this.validateField,
-                    products: this.props.products,
-                    selected: this.state.markedItem,
-                    appMode: this.state.appMode,
-                    submitData: this.submitData,
-                    canselForm: this.canselForm
+                    { className: 'AppContainer' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'ProductsListAndButton' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'ProductsList' },
+                            table
+                        ),
+                        _react2.default.createElement(
+                            'button',
+                            { className: 'NewLI', onClick: this.addNewItem },
+                            'Click to add new list item'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'CardAndFormBlock' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'CardBlock' },
+                            this.state.appMode === 1 && this.state.products.map(function (el) {
+                                return _react2.default.createElement(_itemCard2.default, {
+                                    itemName: el.name,
+                                    key: el.code,
+                                    id: el.code,
+                                    itemLeft: el.left,
+                                    itemPrice: el.price,
+                                    pictureUrl: el.url,
+                                    products: _this2.props.products,
+                                    markItem: _this2.markItem,
+                                    selected: _this2.state.markedItem
+                                });
+                            })
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'FormBlock' },
+                            this.state.appMode === 2 && _react2.default.createElement(_newGood2.default, {
+                                nameFieldValid: this.state.nameFieldValid,
+                                priceFieldValid: this.state.priceFieldValid,
+                                urlFieldValid: this.state.urlFieldValid,
+                                leftFieldValid: this.state.leftFieldValid,
+                                nameFieldValue: this.state.nameFieldValue,
+                                priceFieldValue: this.state.priceFieldValue,
+                                urlFieldValue: this.state.urlFieldValue,
+                                leftFieldValue: this.state.leftFieldValue,
+                                validateField: this.validateField,
+                                products: this.props.products,
+                                selected: this.state.markedItem,
+                                appMode: this.state.appMode,
+                                submitData: this.submitData,
+                                canselForm: this.canselForm
 
-                }),
-                this.state.appMode === 3 && _react2.default.createElement(_newGood2.default, {
-                    nameFieldValid: this.state.nameFieldValid,
-                    priceFieldValid: this.state.priceFieldValid,
-                    urlFieldValid: this.state.urlFieldValid,
-                    leftFieldValid: this.state.leftFieldValid,
-                    nameFieldValue: this.state.nameFieldValue,
-                    priceFieldValue: this.state.priceFieldValue,
-                    urlFieldValue: this.state.urlFieldValue,
-                    leftFieldValue: this.state.leftFieldValue,
-                    validateField: this.validateField,
-                    products: this.props.products,
-                    selected: this.state.markedItem,
-                    appMode: this.state.appMode,
-                    submitData: this.submitData,
-                    canselForm: this.canselForm
-
-                })
+                            }),
+                            this.state.appMode === 3 && _react2.default.createElement(_newGood2.default, {
+                                nameFieldValid: this.state.nameFieldValid,
+                                priceFieldValid: this.state.priceFieldValid,
+                                urlFieldValid: this.state.urlFieldValid,
+                                leftFieldValid: this.state.leftFieldValid,
+                                nameFieldValue: this.state.nameFieldValue,
+                                priceFieldValue: this.state.priceFieldValue,
+                                urlFieldValue: this.state.urlFieldValue,
+                                leftFieldValue: this.state.leftFieldValue,
+                                validateField: this.validateField,
+                                products: this.props.products,
+                                selected: this.state.markedItem,
+                                appMode: this.state.appMode,
+                                submitData: this.submitData,
+                                canselForm: this.canselForm
+                            })
+                        )
+                    )
+                )
             );
         }
     }]);
@@ -25029,6 +25064,12 @@ module.exports = function() {
 
 /***/ }),
 /* 22 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25068,9 +25109,11 @@ var Product = function (_React$Component) {
 
       return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Product.__proto__ || Object.getPrototypeOf(Product)).call.apply(_ref, [this].concat(args))), _this), _this.prodMark = function () {
          _this.props.markItem(_this.props.id);
-      }, _this.prodEdit = function () {
-         _this.props.editItem(_this.props.id);
-      }, _this.prodDel = function () {
+      }, _this.prodEdit = function (EO) {
+         EO.stopPropagation();
+         _this.props.editItem(_this.props.id, _this.props.arrayIndex);
+      }, _this.prodDel = function (EO) {
+         EO.stopPropagation();
          _this.props.deleteItem(_this.props.id);
       }, _temp), _possibleConstructorReturn(_this, _ret);
    }
@@ -25094,7 +25137,7 @@ var Product = function (_React$Component) {
             _react2.default.createElement(
                'td',
                { className: 'TableItemPicture' },
-               _react2.default.createElement('img', { src: "img/" + this.props.pictureUrl })
+               _react2.default.createElement('img', { src: this.props.pictureUrl })
             ),
             _react2.default.createElement(
                'td',
@@ -25129,7 +25172,7 @@ var Product = function (_React$Component) {
 exports.default = Product;
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25144,6 +25187,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
+
+__webpack_require__(25);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25173,11 +25218,11 @@ var Card = function (_React$Component) {
                     { className: 'ProductCardName' },
                     this.props.itemName
                 ),
-                _react2.default.createElement('img', { className: 'ProductCardPicture', src: 'img/' + this.props.pictureUrl }),
+                _react2.default.createElement('img', { className: 'ProductCardPicture', src: this.props.pictureUrl }),
                 _react2.default.createElement(
                     'p',
                     { className: 'ProductCardPrice' },
-                    this.props.itemPrice + ' BTC'
+                    this.props.itemPrice + ' JQuery Symbols'
                 )
             );
         }
@@ -25189,7 +25234,13 @@ var Card = function (_React$Component) {
 exports.default = Card;
 
 /***/ }),
-/* 24 */
+/* 25 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25205,7 +25256,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-__webpack_require__(25);
+__webpack_require__(27);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25248,7 +25299,7 @@ var Form = function (_React$Component) {
                 _react2.default.createElement(
                     'div',
                     { className: 'FormField FormFieldName' },
-                    _react2.default.createElement('input', { type: 'text', name: 'nameFieldValid', placeholder: 'Name', className: 'nameFieldValue', onChange: this.validateField }),
+                    _react2.default.createElement('input', { type: 'text', name: 'nameFieldValid', placeholder: 'Name', className: 'nameFieldValue', defaultValue: this.props.nameFieldValue, onChange: this.validateField }),
                     _react2.default.createElement(
                         'div',
                         { className: 'FormFieldNameMessage' },
@@ -25258,7 +25309,7 @@ var Form = function (_React$Component) {
                 _react2.default.createElement(
                     'div',
                     { className: 'FormField FormFieldName' },
-                    _react2.default.createElement('input', { type: 'text', name: 'priceFieldValid', placeholder: 'Price', className: 'priceFieldValue', onChange: this.validateField }),
+                    _react2.default.createElement('input', { type: 'text', name: 'priceFieldValid', placeholder: 'Price', className: 'priceFieldValue', defaultValue: this.props.priceFieldValue, onChange: this.validateField }),
                     _react2.default.createElement(
                         'div',
                         { className: 'FormFieldNameMessage' },
@@ -25268,7 +25319,7 @@ var Form = function (_React$Component) {
                 _react2.default.createElement(
                     'div',
                     { className: 'FormField FormFieldName' },
-                    _react2.default.createElement('input', { type: 'text', name: 'urlFieldValid', placeholder: 'pictureURL', className: 'urlFieldValue', onChange: this.validateField }),
+                    _react2.default.createElement('input', { type: 'text', name: 'urlFieldValid', placeholder: 'pictureURL', className: 'urlFieldValue', defaultValue: this.props.urlFieldValue, onChange: this.validateField }),
                     _react2.default.createElement(
                         'div',
                         { className: 'FormFieldNameMessage' },
@@ -25278,7 +25329,7 @@ var Form = function (_React$Component) {
                 _react2.default.createElement(
                     'div',
                     { className: 'FormField FormFieldName' },
-                    _react2.default.createElement('input', { type: 'text', name: 'leftFieldValid', placeholder: 'Left', className: 'leftFieldValue', onChange: this.validateField }),
+                    _react2.default.createElement('input', { type: 'text', name: 'leftFieldValid', placeholder: 'Left', className: 'leftFieldValue', defaultValue: this.props.leftFieldValue, onChange: this.validateField }),
                     _react2.default.createElement(
                         'div',
                         { className: 'FormFieldNameMessage' },
@@ -25305,16 +25356,16 @@ var Form = function (_React$Component) {
 exports.default = Form;
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports) {
 
-module.exports = [{"name":"apple","code":1,"price":25,"url":"apple.jpg","left":2000},{"name":"pear","code":2,"price":35,"url":"pear.jpg","left":1000},{"name":"pineapple","code":3,"price":55,"url":"pineapple.jpg","left":200},{"name":"grape","code":4,"price":38,"url":"grape.jpg","left":1300},{"name":"cat","code":5,"price":135,"url":"cat.jpg","left":20},{"name":"dog","code":6,"price":25,"url":"dog.jpg","left":80}]
+module.exports = [{"name":"apple","code":0,"price":25,"url":"img/apple.jpg","left":2000},{"name":"pear","code":1,"price":35,"url":"img/pear.jpg","left":1000},{"name":"pineapple","code":2,"price":55,"url":"img/pineapple.jpg","left":200},{"name":"grape","code":3,"price":38,"url":"img/grape.jpg","left":1300},{"name":"cat","code":4,"price":135,"url":"img/cat.jpg","left":20},{"name":"dog","code":5,"price":25,"url":"img/dog.jpg","left":80}]
 
 /***/ })
 /******/ ]);

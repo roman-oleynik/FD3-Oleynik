@@ -6,6 +6,6 @@ let productsList = require('./productsList.json');
        
        
 ReactDOM.render(
-    <IShop products={productsList} title='Магазин фруктов, ягод и животных' />,            
+    <IShop products={productsList} title='The Reactive Market' />,            
     document.getElementById('container')
 );

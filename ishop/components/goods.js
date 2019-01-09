@@ -5,10 +5,13 @@ class Product extends React.Component {
       this.props.markItem(this.props.id);
 
    }
-   prodEdit = () => {
-      this.props.editItem(this.props.id);
+   prodEdit = (EO) => {
+      EO.stopPropagation();
+      this.props.editItem(this.props.id, this.props.arrayIndex);
+      
    }
-   prodDel = () => {
+   prodDel = (EO) => {
+      EO.stopPropagation();
       this.props.deleteItem(this.props.id);
    }
    render() {
@@ -16,7 +19,7 @@ class Product extends React.Component {
                   <td className='TableItemName'>{this.props.itemName}</td>
                   <td className='TableItemPrice'>{this.props.itemPrice}</td>
                   <td className='TableItemPicture'>
-                     <img src={"img/"+this.props.pictureUrl}></img>
+                     <img src={this.props.pictureUrl}></img>
                   </td>
                   <td className='TableItemLeft'>{this.props.itemLeft}</td>
                   <td className='TableItemEdit'>

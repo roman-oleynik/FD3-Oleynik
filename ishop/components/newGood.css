@@ -1,5 +1,40 @@
 .NewGoodForm {
     display: flex;
     flex-direction: column;
-    
+    align-items: flex-start;
+}
+.FormFieldNameMessage {
+    color: red;
+}
+.nameFieldValue {
+    padding: 5px;
+    font-size: 18px;
+    border: 2px solid #000;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+.priceFieldValue {
+    padding: 5px;
+    font-size: 18px;
+    border: 2px solid #000;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+.urlFieldValue {
+    padding: 5px;
+    font-size: 18px;
+    border: 2px solid #000;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+.leftFieldValue {
+    padding: 5px;
+    font-size: 18px;
+    border: 2px solid #000;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+.FormField {
+    display: flex;
+    align-items: center;
 }

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": ".\\node_modules\\.bin\\webpack",
-    "livebuild": ".\\node_modules\\.bin\\webpack-dev-server --progress --colors"
+    "livebuild": ".\\node_modules\\.bin\\webpack-dev-server --progress --colors --open"
   },
   "keywords": [],
   "author": "",

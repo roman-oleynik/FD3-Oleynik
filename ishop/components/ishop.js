@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import './ishop.css';
+
 import Product from './goods';
 import Card from './itemCard';
 import Form from './newGood';
@@ -38,6 +40,10 @@ class IShop extends React.Component {
     markItem = (id) => {
         this.setState({
             markedItem:id,
+            nameFieldValue: '',
+            priceFieldValue: '',
+            urlFieldValue: '',
+            leftFieldValue: '',
         })
     };
 
@@ -48,16 +54,24 @@ class IShop extends React.Component {
         })
     };
 
-    editItem = (id) => {
-        
+    editItem = (id, i) => {
         this.setState({
             appMode: 3,
-            editedItem: id
+            editedItem: id,
+            nameFieldValue: this.state.products[i].name,
+            priceFieldValue: this.state.products[i].price,
+            urlFieldValue: this.state.products[i].url,
+            leftFieldValue: this.state.products[i].left,
+            nameFieldValid: true,
+            priceFieldValid: true,
+            urlFieldValid: true,
+            leftFieldValid: true,
         });
-        
+        console.log(i)
     };
 
     deleteItem = (id) => {
+        
         const conf = confirm('Do you really want to delete this item?');
         if (conf) {
             this.setState({
@@ -66,7 +80,6 @@ class IShop extends React.Component {
                 })
             })
         }
-        
     };
 
     validateField = (target) => {
@@ -110,7 +123,7 @@ class IShop extends React.Component {
                         if (el.code === this.state.editedItem) {
                             return {
                                 name: this.state.nameFieldValue,
-                                key: this.state.editedItem,
+                                code: this.state.editedItem,
                                 price: +this.state.priceFieldValue,
                                 url: this.state.urlFieldValue,
                                 left: +this.state.leftFieldValue
@@ -152,7 +165,7 @@ class IShop extends React.Component {
     };
     
     render() {
-        let itemsList = this.state.products.map (el => {
+        let itemsList = this.state.products.map ((el, i) => {
             return <Product
                 className = "TableItem" 
                 itemName = {el.name}
@@ -167,6 +180,7 @@ class IShop extends React.Component {
                 deleteItem = {this.deleteItem}
                 selected = {this.state.markedItem}
                 appMode = {this.state.appMode}
+                arrayIndex = {i}
             />
         });
         let table = <table className='Table'>
@@ -183,59 +197,68 @@ class IShop extends React.Component {
         
         return <div className='MarketBlock'>
                     <h1 className='MarketTitle'>{this.props.title}</h1>
-                    <div className='ProductsList'>{table}</div>
-                    <button className='NewLI' onClick={this.addNewItem}>Add new list item</button>
-                    {this.state.appMode === 1 && this.state.products.map( el => {
-                        return <Card 
-                            itemName = {el.name}
-                            key = {el.code}
-                            id = {el.code}
-                            itemLeft = {el.left}
-                            itemPrice = {el.price}
-                            pictureUrl = {el.url}
-                            products = {this.props.products}
-                            markItem = {this.markItem}
-                            selected = {this.state.markedItem}
-                        />
-                    })}
-                    {this.state.appMode === 2 &&
-                    <Form 
-                        nameFieldValid = {this.state.nameFieldValid}
-                        priceFieldValid = {this.state.priceFieldValid}
-                        urlFieldValid = {this.state.urlFieldValid}
-                        leftFieldValid = {this.state.leftFieldValid}
-                        nameFieldValue = {this.state.nameFieldValue}
-                        priceFieldValue = {this.state.priceFieldValue}
-                        urlFieldValue = {this.state.urlFieldValue}
-                        leftFieldValue = {this.state.leftFieldValue}
-                        validateField = {this.validateField}
-                        products = {this.props.products} 
-                        selected = {this.state.markedItem}
-                        appMode = {this.state.appMode}
-                        submitData = {this.submitData}
-                        canselForm = {this.canselForm}
+                    <div className='AppContainer'>
+                        <div className='ProductsListAndButton'>
+                            <div className='ProductsList'>{table}</div>
+                            <button className='NewLI' onClick={this.addNewItem}>Click to add new list item</button>
+                        </div>
+                        <div className='CardAndFormBlock'>
+                            <div className='CardBlock'>
+                            {this.state.appMode === 1 && this.state.products.map( el => {
+                                return <Card 
+                                    itemName = {el.name}
+                                    key = {el.code}
+                                    id = {el.code}
+                                    itemLeft = {el.left}
+                                    itemPrice = {el.price}
+                                    pictureUrl = {el.url}
+                                    products = {this.props.products}
+                                    markItem = {this.markItem}
+                                    selected = {this.state.markedItem}
+                                />
+                            })}
+                            </div>
+                            <div className='FormBlock'>
+                                {this.state.appMode === 2 &&
+                                    <Form 
+                                        nameFieldValid = {this.state.nameFieldValid}
+                                        priceFieldValid = {this.state.priceFieldValid}
+                                        urlFieldValid = {this.state.urlFieldValid}
+                                        leftFieldValid = {this.state.leftFieldValid}
+                                        nameFieldValue = {this.state.nameFieldValue}
+                                        priceFieldValue = {this.state.priceFieldValue}
+                                        urlFieldValue = {this.state.urlFieldValue}
+                                        leftFieldValue = {this.state.leftFieldValue}
+                                        validateField = {this.validateField}
+                                        products = {this.props.products} 
+                                        selected = {this.state.markedItem}
+                                        appMode = {this.state.appMode}
+                                        submitData = {this.submitData}
+                                        canselForm = {this.canselForm}
 
-                    />
-                    }
-                    {this.state.appMode === 3 &&
-                    <Form 
-                        nameFieldValid = {this.state.nameFieldValid}
-                        priceFieldValid = {this.state.priceFieldValid}
-                        urlFieldValid = {this.state.urlFieldValid}
-                        leftFieldValid = {this.state.leftFieldValid}
-                        nameFieldValue = {this.state.nameFieldValue}
-                        priceFieldValue = {this.state.priceFieldValue}
-                        urlFieldValue = {this.state.urlFieldValue}
-                        leftFieldValue = {this.state.leftFieldValue}
-                        validateField = {this.validateField}
-                        products = {this.props.products} 
-                        selected = {this.state.markedItem}
-                        appMode = {this.state.appMode}
-                        submitData = {this.submitData}
-                        canselForm = {this.canselForm}
-
-                    />
-                    }
+                                    />
+                                    }
+                                    {this.state.appMode === 3 &&
+                                    <Form 
+                                        nameFieldValid = {this.state.nameFieldValid}
+                                        priceFieldValid = {this.state.priceFieldValid}
+                                        urlFieldValid = {this.state.urlFieldValid}
+                                        leftFieldValid = {this.state.leftFieldValid}
+                                        nameFieldValue = {this.state.nameFieldValue}
+                                        priceFieldValue = {this.state.priceFieldValue}
+                                        urlFieldValue = {this.state.urlFieldValue}
+                                        leftFieldValue = {this.state.leftFieldValue}
+                                        validateField = {this.validateField}
+                                        products = {this.props.products} 
+                                        selected = {this.state.markedItem}
+                                        appMode = {this.state.appMode}
+                                        submitData = {this.submitData}
+                                        canselForm = {this.canselForm}
+                                    />
+                                    }
+                            </div>
+                        </div>
+                    </div>
                </div> 
     }
 }
