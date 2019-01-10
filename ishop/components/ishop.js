@@ -25,7 +25,7 @@ class IShop extends React.Component {
         products: this.props.products,
         markedItem: null,
         editedItem: null,
-        
+        buttonSubmitDisabled: true,
         appMode: 1,
         nameFieldValid: false,
         priceFieldValid: false,
@@ -56,6 +56,7 @@ class IShop extends React.Component {
 
     editItem = (id, i) => {
         this.setState({
+            markedItem:id,
             appMode: 3,
             editedItem: id,
             nameFieldValue: this.state.products[i].name,
@@ -66,8 +67,8 @@ class IShop extends React.Component {
             priceFieldValid: true,
             urlFieldValid: true,
             leftFieldValid: true,
+            buttonSubmitDisabled: false,
         });
-        console.log(i)
     };
 
     deleteItem = (id) => {
@@ -97,9 +98,15 @@ class IShop extends React.Component {
         :
         this.setState({
             [inputName] : false
-        }) 
+        });
+        
+
+        
+        
         
     };
+
+    
 
     submitData = () => {
         if(this.state.appMode === 2 && this.state.nameFieldValid && this.state.priceFieldValid &&
@@ -113,7 +120,12 @@ class IShop extends React.Component {
                 priceFieldValid: false,
                 urlFieldValid: false,
                 leftFieldValid: false,
-                markedItem: null
+                nameFieldValue: '',
+                priceFieldValue: '',
+                urlFieldValue: '',
+                leftFieldValue: '',
+                markedItem: null,
+                buttonSubmitDisabled:true,
             })
         }
         else if (this.state.appMode === 3 && this.state.nameFieldValid && this.state.priceFieldValid &&
@@ -140,11 +152,13 @@ class IShop extends React.Component {
                     priceFieldValid: false,
                     urlFieldValid: false,
                     leftFieldValid: false,
-                    markedItem: null
+                    nameFieldValue: '',
+                    priceFieldValue: '',
+                    urlFieldValue: '',
+                    leftFieldValue: '',
+                    markedItem: null,
+                    buttonSubmitDisabled:true,
                 })
-        }
-        else {
-            alert('Fill in all fields of form');
         }
                  
         
@@ -161,6 +175,7 @@ class IShop extends React.Component {
             priceFieldValue: '',
             urlFieldValue: '',
             leftFieldValue: '',
+            buttonSubmitDisabled: true,
         })
     };
     
@@ -181,6 +196,7 @@ class IShop extends React.Component {
                 selected = {this.state.markedItem}
                 appMode = {this.state.appMode}
                 arrayIndex = {i}
+                
             />
         });
         let table = <table className='Table'>
@@ -235,7 +251,7 @@ class IShop extends React.Component {
                                         appMode = {this.state.appMode}
                                         submitData = {this.submitData}
                                         canselForm = {this.canselForm}
-
+                                        disabled = {this.state.buttonSubmitDisabled}
                                     />
                                     }
                                     {this.state.appMode === 3 &&
@@ -251,9 +267,11 @@ class IShop extends React.Component {
                                         validateField = {this.validateField}
                                         products = {this.props.products} 
                                         selected = {this.state.markedItem}
+                                        editedItem = {this.state.editedItem}
                                         appMode = {this.state.appMode}
                                         submitData = {this.submitData}
                                         canselForm = {this.canselForm}
+                                        disabled = {this.state.buttonSubmitDisabled}
                                     />
                                     }
                             </div>

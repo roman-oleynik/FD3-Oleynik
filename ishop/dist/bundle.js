@@ -24133,7 +24133,7 @@ var IShop = function (_React$Component) {
             products: _this.props.products,
             markedItem: null,
             editedItem: null,
-
+            buttonSubmitDisabled: true,
             appMode: 1,
             nameFieldValid: false,
             priceFieldValid: false,
@@ -24157,6 +24157,7 @@ var IShop = function (_React$Component) {
             });
         }, _this.editItem = function (id, i) {
             _this.setState({
+                markedItem: id,
                 appMode: 3,
                 editedItem: id,
                 nameFieldValue: _this.state.products[i].name,
@@ -24166,9 +24167,9 @@ var IShop = function (_React$Component) {
                 nameFieldValid: true,
                 priceFieldValid: true,
                 urlFieldValid: true,
-                leftFieldValid: true
+                leftFieldValid: true,
+                buttonSubmitDisabled: false
             });
-            console.log(i);
         }, _this.deleteItem = function (id) {
 
             var conf = confirm('Do you really want to delete this item?');
@@ -24196,7 +24197,12 @@ var IShop = function (_React$Component) {
                     priceFieldValid: false,
                     urlFieldValid: false,
                     leftFieldValid: false,
-                    markedItem: null
+                    nameFieldValue: '',
+                    priceFieldValue: '',
+                    urlFieldValue: '',
+                    leftFieldValue: '',
+                    markedItem: null,
+                    buttonSubmitDisabled: true
                 });
             } else if (_this.state.appMode === 3 && _this.state.nameFieldValid && _this.state.priceFieldValid && _this.state.urlFieldValid && _this.state.leftFieldValid) {
                 _this.setState({
@@ -24218,10 +24224,13 @@ var IShop = function (_React$Component) {
                     priceFieldValid: false,
                     urlFieldValid: false,
                     leftFieldValid: false,
-                    markedItem: null
+                    nameFieldValue: '',
+                    priceFieldValue: '',
+                    urlFieldValue: '',
+                    leftFieldValue: '',
+                    markedItem: null,
+                    buttonSubmitDisabled: true
                 });
-            } else {
-                alert('Fill in all fields of form');
             }
         }, _this.canselForm = function () {
             _this.setState({
@@ -24233,7 +24242,8 @@ var IShop = function (_React$Component) {
                 nameFieldValue: '',
                 priceFieldValue: '',
                 urlFieldValue: '',
-                leftFieldValue: ''
+                leftFieldValue: '',
+                buttonSubmitDisabled: true
             });
         }, _temp), _possibleConstructorReturn(_this, _ret);
     }
@@ -24259,6 +24269,7 @@ var IShop = function (_React$Component) {
                     selected: _this2.state.markedItem,
                     appMode: _this2.state.appMode,
                     arrayIndex: i
+
                 });
             });
             var table = _react2.default.createElement(
@@ -24357,8 +24368,8 @@ var IShop = function (_React$Component) {
                                 selected: this.state.markedItem,
                                 appMode: this.state.appMode,
                                 submitData: this.submitData,
-                                canselForm: this.canselForm
-
+                                canselForm: this.canselForm,
+                                disabled: this.state.buttonSubmitDisabled
                             }),
                             this.state.appMode === 3 && _react2.default.createElement(_newGood2.default, {
                                 nameFieldValid: this.state.nameFieldValid,
@@ -24372,9 +24383,11 @@ var IShop = function (_React$Component) {
                                 validateField: this.validateField,
                                 products: this.props.products,
                                 selected: this.state.markedItem,
+                                editedItem: this.state.editedItem,
                                 appMode: this.state.appMode,
                                 submitData: this.submitData,
-                                canselForm: this.canselForm
+                                canselForm: this.canselForm,
+                                disabled: this.state.buttonSubmitDisabled
                             })
                         )
                     )
@@ -25119,47 +25132,47 @@ var Product = function (_React$Component) {
    }
 
    _createClass(Product, [{
-      key: 'render',
+      key: "render",
       value: function render() {
          return _react2.default.createElement(
-            'tr',
-            { className: 'TableItem' + (this.props.appMode === 1 && this.props.selected === this.props.id ? " selected" : null), id: this.props.id, onClick: this.prodMark },
+            "tr",
+            { className: "TableItem" + (this.props.appMode === 1 && this.props.selected === this.props.id ? " selected" : this.props.appMode === 3 && this.props.selected === this.props.id ? " selected" : null), id: this.props.id, onClick: this.prodMark },
             _react2.default.createElement(
-               'td',
-               { className: 'TableItemName' },
+               "td",
+               { className: "TableItemName" },
                this.props.itemName
             ),
             _react2.default.createElement(
-               'td',
-               { className: 'TableItemPrice' },
+               "td",
+               { className: "TableItemPrice" },
                this.props.itemPrice
             ),
             _react2.default.createElement(
-               'td',
-               { className: 'TableItemPicture' },
-               _react2.default.createElement('img', { src: this.props.pictureUrl })
+               "td",
+               { className: "TableItemPicture" },
+               _react2.default.createElement("img", { src: this.props.pictureUrl })
             ),
             _react2.default.createElement(
-               'td',
-               { className: 'TableItemLeft' },
+               "td",
+               { className: "TableItemLeft" },
                this.props.itemLeft
             ),
             _react2.default.createElement(
-               'td',
-               { className: 'TableItemEdit' },
+               "td",
+               { className: "TableItemEdit" },
                _react2.default.createElement(
-                  'button',
-                  { className: 'TableItemEditButton', onClick: this.prodEdit },
-                  'Edit'
+                  "button",
+                  { className: "TableItemEditButton", onClick: this.prodEdit },
+                  "Edit"
                )
             ),
             _react2.default.createElement(
-               'td',
-               { className: 'TableItemDelete' },
+               "td",
+               { className: "TableItemDelete" },
                _react2.default.createElement(
-                  'button',
-                  { className: 'TableItemDeleteButton', onClick: this.prodDel },
-                  'Delete'
+                  "button",
+                  { className: "TableItemDeleteButton", onClick: this.prodDel },
+                  "Delete"
                )
             )
          );
@@ -25292,7 +25305,6 @@ var Form = function (_React$Component) {
     _createClass(Form, [{
         key: 'render',
         value: function render() {
-
             return _react2.default.createElement(
                 'div',
                 { className: 'NewGoodForm' },
@@ -25338,7 +25350,7 @@ var Form = function (_React$Component) {
                 ),
                 _react2.default.createElement(
                     'button',
-                    { className: 'SubmitButton', onClick: this.submitData },
+                    { className: 'SubmitButton', disabled: this.props.nameFieldValid && this.props.priceFieldValid && this.props.urlFieldValid && this.props.leftFieldValid ? false : true, onClick: this.submitData },
                     'Submit'
                 ),
                 _react2.default.createElement(

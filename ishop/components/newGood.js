@@ -15,7 +15,6 @@ class Form extends React.Component {
     };
 
     render() {
-        
         return <div className='NewGoodForm'>
                     <div className='FormField FormFieldName'>
                         <input type='text' name='nameFieldValid' placeholder='Name' className='nameFieldValue' defaultValue={this.props.nameFieldValue} onChange={this.validateField}></input>
@@ -33,7 +32,8 @@ class Form extends React.Component {
                         <input type='text' name='leftFieldValid' placeholder='Left' className='leftFieldValue' defaultValue={this.props.leftFieldValue} onChange={this.validateField}></input>
                         <div className='FormFieldNameMessage'>{this.props.leftFieldValid ? "" : "Please, fill in this field"}</div>
                     </div>
-                    <button className='SubmitButton' onClick={this.submitData}>Submit</button>
+                    <button className='SubmitButton' disabled={(this.props.nameFieldValid && this.props.priceFieldValid &&
+            this.props.urlFieldValid && this.props.leftFieldValid) ? false : true} onClick={this.submitData}>Submit</button>
                     <button className='CancelButton' onClick={this.canselForm}>Cansel</button>
                </div>
     }

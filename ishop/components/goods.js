@@ -15,7 +15,7 @@ class Product extends React.Component {
       this.props.deleteItem(this.props.id);
    }
    render() {
-      return <tr className={`TableItem${this.props.appMode === 1 && this.props.selected === this.props.id ? " selected" : null}`} id={this.props.id} onClick={this.prodMark}>
+      return <tr className={`TableItem${this.props.appMode === 1 && this.props.selected === this.props.id ? " selected" : this.props.appMode === 3 && this.props.selected === this.props.id ? " selected" : null}`} id={this.props.id} onClick={this.prodMark}>
                   <td className='TableItemName'>{this.props.itemName}</td>
                   <td className='TableItemPrice'>{this.props.itemPrice}</td>
                   <td className='TableItemPicture'>
