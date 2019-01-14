@@ -24108,10 +24108,19 @@ var Parser = function (_React$Component) {
         key: 'render',
         value: function render() {
             var text = this.props.text;
+            var textSplitted = text.split(/<br ?\/?>/gi);
+            var arr = [];
+
+            for (var i in textSplitted) {
+                arr.push(textSplitted[i]);
+                if (i) arr.push(_react2.default.createElement('br', null));
+            }
+
+            console.log(textSplitted);
             return _react2.default.createElement(
-                'pre',
+                'div',
                 { className: 'Display' },
-                text.replace(/<br ?\/?>/gi, "\n")
+                arr
             );
         }
     }]);
