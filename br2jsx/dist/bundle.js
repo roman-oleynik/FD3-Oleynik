@@ -24112,11 +24112,9 @@ var Parser = function (_React$Component) {
             var arr = [];
 
             for (var i in textSplitted) {
-                arr.push(textSplitted[i]);
-                if (i) arr.push(_react2.default.createElement('br', null));
+                arr.push(textSplitted[i])(i < textSplitted.length - 1) && arr.push(_react2.default.createElement('br', { key: i }));
             }
 
-            console.log(textSplitted);
             return _react2.default.createElement(
                 'div',
                 { className: 'Display' },

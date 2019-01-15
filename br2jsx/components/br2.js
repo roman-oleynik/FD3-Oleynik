@@ -7,7 +7,8 @@ class Parser extends React.Component {
         let arr = [];
 
         for (let i in textSplitted) {
-            arr.push(textSplitted[i]).push(<br/>)            
+            arr.push(textSplitted[i])
+            if (i < textSplitted.length-1) arr.push(<br key={i}/>);            
         }
         
         return <div className='Display'>{arr}</div>
