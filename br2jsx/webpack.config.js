@@ -9,7 +9,7 @@ const extractCSS = new ExtractTextPlugin({
 module.exports = { 
     entry: "./index.js", // основной файл приложения
     output:{ 
-        path: path.join(__dirname, 'dist'), // путь к каталогу выходных файлов
+        path: __dirname, // путь к каталогу выходных файлов
         filename: "bundle.js"  // название создаваемого файла 
     }, 
     devtool:'source-map',
