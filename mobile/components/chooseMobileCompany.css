@@ -1,0 +1,20 @@
+@import url(https://fonts.googleapis.com/css?family=Rubik);* {
+    font-family: 'Rubik', sans-serif;
+}
+td {
+    border: 1px solid #000;
+    padding: 3px;
+    border-radius: 6px;
+}
+button {
+    padding: 5px;
+}
+.red {
+    background: red;
+}
+.green {
+    background: green;
+}
+.yellow {
+    background: yellow
+}

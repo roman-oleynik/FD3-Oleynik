@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {ChooseMobileCompany} from './chooseMobileCompany';
 import {FilterClients} from './filterClients';
 // import {TableOfClients} from './tableOfClients';
-import {Client} from './tableDataOfClients';
+import {Client} from './Client';
 import {ClientForm} from './clientForm';
 
 import {handler} from './events';
@@ -108,8 +108,6 @@ class MobileCompanyApp extends React.PureComponent {
     submitData = () => {
         if (this.state.workMode === 2 && this.lastNameRef.value && this.firstNameRef.value && this.patronymRef.value && this.balanceRef.value) {
             if (this.state.companyMode === 1) {
-                
-
                 let newClientData = {lastname: this.lastNameRef.value, code: this.state.velcomClients.length+1, 
                     firstname: this.firstNameRef.value, patronym: this.patronymRef.value, 
                     balance: this.balanceRef.value};
