@@ -1,0 +1,5 @@
+[
+    {"firstname": "Иван", "code":0, "lastname": "Иванов", "patronym": "Иванович", "balance": 200},
+    {"firstname": "Петр", "code":1, "lastname": "Петров", "patronym": "Петрович", "balance": 100},
+    {"firstname": "Костыль", "code":2, "lastname": "Костылев","patronym": "Костылевич", "balance": -200}
+]
