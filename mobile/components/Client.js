@@ -10,6 +10,7 @@ class Client extends React.PureComponent {
         const DeleteItem = "DeleteItem";
         handler.emit(DeleteItem, this.props.id, this.props.companyMode); 
     }
+    
     render() {
             console.log('Client '+ this.props.id +' render')
             return <tr className='ClientTableRow'>

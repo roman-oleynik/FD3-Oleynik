@@ -189,19 +189,21 @@ class MobileCompanyApp extends React.PureComponent {
     deleteItem = (id) => {
         const conf = confirm('Do you really want to delete this item?');
         if (conf) {
-            this.state.companyMode === 1
-            ?
-            this.setState({
-                velcomClients: this.state.velcomClients.filter(e => {
-                    return e.code !== id
+            
+            // let newArr = arr.splice(id,1)
+            // console.log(newArr)
+            if (this.state.companyMode === 1) {
+                this.setState({
+                    velcomClients: this.state.velcomClients.filter( e => e.code !== id )
                 })
-            })
-            :
-            this.setState({
-                mtsClients: this.state.mtsClients.filter(e => {
-                    return e.code !== id
+            } else if (this.state.companyMode === 2) {
+                this.setState({
+                    mtsClients: this.state.mtsClients.filter(e => {
+                        return e.code !== id
+                    })
                 })
-            })
+            }
+            
         }
     };
 
@@ -218,12 +220,11 @@ class MobileCompanyApp extends React.PureComponent {
                 mtsClients={this.state.mtsClients}
                 filterMode={this.state.filterMode} 
             /> 
-            
             {
                 this.state.companyMode === 1 && this.state.filterMode === 1 ?
                 this.state.velcomClients.map((el, i) => {
                     return <Client 
-                        key={i}
+                        key={el.code}
                         id={el.code}
                         firstname={el.firstname}
                         lastname={el.lastname}
@@ -241,7 +242,7 @@ class MobileCompanyApp extends React.PureComponent {
                 this.state.velcomClients.map((el, i) => {
                     if (el.balance >= 0)
                     return <Client 
-                        key={i}
+                        key={el.code}
                         id={el.code}
                         firstname={el.firstname}
                         lastname={el.lastname}
@@ -259,7 +260,7 @@ class MobileCompanyApp extends React.PureComponent {
                 this.state.velcomClients.map((el, i) => {
                     if (el.balance < 0)
                     return <Client 
-                        key={i}
+                        key={el.code}
                         id={el.code}
                         firstname={el.firstname}
                         lastname={el.lastname}
@@ -276,7 +277,7 @@ class MobileCompanyApp extends React.PureComponent {
                 this.state.companyMode === 2 && this.state.filterMode === 1 ?
                 this.state.mtsClients.map((el, i) => {
                     return <Client 
-                        key={i}
+                        key={el.code}
                         id={el.code}
                         firstname={el.firstname}
                         lastname={el.lastname}
@@ -294,7 +295,7 @@ class MobileCompanyApp extends React.PureComponent {
                 this.state.mtsClients.map((el, i) => {
                     if (el.balance < 0)
                     return <Client 
-                        key={i}
+                        key={el.code}
                         id={el.code}
                         firstname={el.firstname}
                         lastname={el.lastname}
@@ -312,7 +313,7 @@ class MobileCompanyApp extends React.PureComponent {
                 this.state.mtsClients.map((el, i) => {
                     if (el.balance < 0)
                     return <Client 
-                        key={i}
+                        key={el.code}
                         id={el.code}
                         firstname={el.firstname}
                         lastname={el.lastname}
